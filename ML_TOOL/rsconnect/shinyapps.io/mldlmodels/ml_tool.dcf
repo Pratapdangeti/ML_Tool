@@ -1,0 +1,8 @@
+name: ml_tool
+title:
+account: mldlmodels
+server: shinyapps.io
+appId: 161150
+bundleId: 752655
+url: https://mldlmodels.shinyapps.io/ml_tool/
+when: 1489863821.72561

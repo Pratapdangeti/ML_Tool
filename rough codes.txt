@@ -1,0 +1,95 @@
+as.formula(paste("y~", paste(factors, collapse="+")))
+
+  output$selx <- renderUI({
+    vars <- names(data())
+    selectInput("xvars",label = "Select X variables", choices = vars,multiple = TRUE)
+  })
+  
+  output$sely <- renderUI({
+    vars <- names(data())
+    selectInput("yvar",label = "Select Y variable", choices = vars)
+  })
+
+
+    STextinput <- eventReactive(input$action, {
+      
+      if (input$selectc =="Random_Forest_Classifer"){
+        
+        #as.formula(paste("y~", paste(factors, collapse="+")))
+        
+        rf_fit = randomForest(as.formula(input$yvar ~ paste(input$xvars,collapse ="+")),data = data())
+        svm_trainpred = predict(rf_fit,data())
+        
+        #trntble = table(data$svm_pred,train_datan$class)
+        
+        paste(svm_trainpred)
+        #paste("Train Accuracy:",round(trnacc,4)*100,"\n","Test Accuracy:",round(acc,4)*100,sep='\n')
+        
+      }
+      
+    })
+    
+    output$accrcy <- renderText({
+      acc = STextinput()
+      acc })
+
+
+      #attach()
+     # rf_fit = randomForest(class ,data = data.frame(data()))
+      
+      
+      
+      #svm_trainpred = predict(rf_fit,data())
+      
+      #trntble = table(data$svm_pred,train_datan$class)
+      
+     # paste(summary(rf_fit))
+      #paste(svm_trainpred)
+      #paste("Train Accuracy:",round(trnacc,4)*100,"\n","Test Accuracy:",round(acc,4)*100,sep='\n')
+
+
+  data <- reactive({
+    dfile <-
+      input$chosenfile[1, 4] # <- filename with path is the [1,4] cell in obj
+    if (!is.null(dfile))
+      readr::read_csv(dfile,col_names = input$header)
+  })
+  
+
+  
+  data <- reactive({
+    infile <- input$datafile
+    if (is.null(infile)){
+      return(NULL)
+    }
+    read.csv(infile$datapath)
+  })
+
+
+
+
+     STextinput <- eventReactive(input$action, {
+      
+      if (input$selectc =="Random_Forest_Classifer"){
+        
+        vars = names(data())
+        yvar = input$yvar
+        xvars = vars[-which(names(data()) == yvar)]  
+        
+        frmla = as.formula(paste(yvar,"~",paste(xvars,collapse = "+")))
+        
+        
+        rf_fit = randomForest(frmla,data = data())
+        svm_trainpred = predict(rf_fit,data())
+        
+        #trntble = table(data$svm_pred,train_datan$class)
+        
+        paste(svm_trainpred)
+        #paste("Train Accuracy:",round(trnacc,4)*100,"\n","Test Accuracy:",round(acc,4)*100,sep='\n')
+        
+      }
+      
+    })
+    
+
+ 
